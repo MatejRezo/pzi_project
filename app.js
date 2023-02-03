@@ -1,28 +1,25 @@
 const express = require('express');
-const app = express();
+const cors = require("cors");
+const cookieparser = require("cookie-parser");
 const port = 3000;
+const userRouter = require("./routers/userRouter");
+const printerRouter = require("./routers/printerRouter");
 
-const mysql = require('mysql');
-const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'Dvadeset20',
-  database: 'test'
-});
+
+const app = express();
+app.use(cors({}));
+app.use(cookieparser());
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
+
+
 
 app.get('/', (req, res) => {
-  res.send('Hello World!');
+  res.status(200).json({ Message: 'Hello World!' });
 });
 
-app.get('/users', (req, res) => {
-  connection.query('SELECT * FROM test.user', (err, rows, fields) => {
-    if (err) throw err
-    res.send(rows);
-  })
-});
-
-
-
+app.use("/users", userRouter);
+app.use("/printers", printerRouter)
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });

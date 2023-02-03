@@ -2,6 +2,6 @@
 elm-stuff
 # elm-repl generated files
 repl-temp-*
-
+.env
 
 node_modules
